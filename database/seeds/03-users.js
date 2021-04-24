@@ -6,7 +6,7 @@ exports.seed = function (knex) {
           {
               email: "test@test.com",
               password: "password1",
-              phone: 5555555555,
+              phone: "5555555555",
               name: "TT-14"
           },
         ]);

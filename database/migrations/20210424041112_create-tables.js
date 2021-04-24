@@ -6,7 +6,7 @@ exports.up = function(knex) {
             tbl.string("name",80).notNullable();
             tbl.string("email", 80).notNullable().unique();
             tbl.string("password").notNullable();
-            tbl.integer("phone").notNullable().unique();
+            tbl.varchar("phone", 10).notNullable().unique();
         })
         .createTable("water_schedule", tbl => {
             tbl.increments("water_id");
