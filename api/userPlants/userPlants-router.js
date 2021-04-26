@@ -1,5 +1,6 @@
 const router = require("express").Router();
 const UserPlants = require("./userPlants-model");
+const { checkNewUserPlantPayload } = require('../middleware/middleware');
 
 // [GET] - /api/userplants
 router.get("/", (req, res, next) => {
@@ -10,7 +11,7 @@ router.get("/", (req, res, next) => {
 
 
 // [POST] - /api/userplants
-router.post('/', async (req,res,next) => {
+router.post('/', checkNewUserPlantPayload, async (req,res,next) => {    
     try {
         const newPlant = await UserPlants.addPlant(req.body);
         res.status(200).json(newPlant);
@@ -20,7 +21,7 @@ router.post('/', async (req,res,next) => {
 });
 
 // [PUT] - /api/userplants
-router.put('/:user_plant_id', async (req,res,next) => {
+router.put('/:user_plant_id',checkNewUserPlantPayload, async (req,res,next) => {
     const {user_plant_id} = req.params;
 
     try {
