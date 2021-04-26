@@ -1,6 +1,4 @@
 
-
-
 const checkNewUserPayload = (req, res, next) => {
     const { email, password, phone, name } = req.body;
     switch(true) {
