@@ -14,8 +14,10 @@ server.use(cors());
 
 server.use('/api/species', speciesRouter);
 server.use('/api/userplants', userPlantsRouter);
+server.use('/api/users', userRouter);
 server.use('/api/auth', authRouter)
-server.use('/api/user', userRouter);
+
+
 
 server.use((err, req, res, next) => { // eslint-disable-line
   res.status(err.status || 500).json({
