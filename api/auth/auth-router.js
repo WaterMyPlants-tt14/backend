@@ -1,26 +1,18 @@
 const bcrypt = require('bcryptjs');
 const router = require('express').Router();
-const { checkLoginCredentials, 
-    checkEmailUnique, 
-    checkEmailExists, 
-    checkNewUserPayload, 
-    formatNewUserPayload, 
-    } = require('../middleware/middleware');
-const Users = require('../users/users-model');
-
+const Users = require('../users/users-model.js');
+const mw = require('../middleware/middleware.js');
 const jwt = require('jsonwebtoken');
 const { jwtSecret } = require('../config/secrets.js');
 
-
-router.post('/register', checkNewUserPayload, formatNewUserPayload, checkEmailUnique, (req, res, next) => {
+router.post('/register', mw.checkNewUserPayload, mw.formatNewUserPayload, mw.checkEmailUnique, async (req, res, next) => {
     let user = req.body;
 
-    const rounds = process.env.BCRYPT_ROUNDS || 8;
-    const hash = bcrypt.hashSync(user.password, rounds);
+    //const rounds = process.env.BCRYPT_ROUNDS || 8;
+    const hash = await bcrypt.hashSync(user.password, 8);
 
     user.password = hash;
 
-    //add???
     Users.add(user)
         .then(saved => {
             res.status(201).json(saved);
@@ -28,24 +20,18 @@ router.post('/register', checkNewUserPayload, formatNewUserPayload, checkEmailUn
         .catch(next);
 });
 
-router.post('/login', checkLoginCredentials, checkEmailExists, (req, res, next) => {
+router.post('/login', mw.checkLoginCredentials, mw.checkEmailExists, (req, res, next) => {
     let { name, email, phone, password, } = req.body;
+    if (req.body.user && bcrypt.compareSync(password, req.body.user.password)) {
+        const token = makeToken(req.body.user);
 
-    //findby???
-    Users.findByFilter({ email })
-        .then(([user]) => {
-            if (user && bcrypt.compareSync(password, user.password)) {
-                const token = makeToken(user);
-
-                res.status(200).json({
-                    message: `Welcome, ${user.name}!`,
-                    token
-                });
-            } else {
-                res.status(401).json({ message: 'Invalid Credentials' });
-            }
-        })
-        .catch(next);
+        res.status(200).json({
+            message: `Welcome, ${req.body.user.name}!`,
+            token
+        });
+    } else {
+        next({ message: "Invalid Credentials", status: 401 });
+    }
 
 });
 
