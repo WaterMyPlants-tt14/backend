@@ -73,10 +73,27 @@ function formatPhoneNumber (phoneNumberString) {
     return null;
 }
 
+const checkNewUserPlantPayload = (req, res, next) => {
+    const {plant_nickname, water_day} = req.body;
+    if (!plant_nickname) {
+        next({status: 400, message: 'Please provide a nickname for you lil green friend'});
+    } else if (plant_nickname.length > 255) {
+        next({status: 400, message: 'Sorry the International Plant Union has restricted plant names to 255 characters or less'});
+    } else if (!water_day) {
+        next({status: 400, message: 'Please provide a day to begin watering your plant'});
+    } else if (typeof water_day !== 'number') {
+        next({status: 400, message: 'Sorry water days only identify as numbers'});
+    } else {
+        req.body.plant_nickname = plant_nickname.trim();
+        req.body.water_day = water_day.trim();
+    }
+};
+
 module.exports = {
     checkLoginCredentials,
     checkEmailUnique,
     checkEmailExists,
     checkNewUserPayload,
     formatNewUserPayload,
+    checkNewUserPlantPayload
 };
