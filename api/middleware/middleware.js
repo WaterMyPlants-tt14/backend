@@ -1,5 +1,18 @@
 
 
+const checkLoginCredentials = (req, res, next) => {
+    const { email, password } = req.body;
+    if (
+        !email ||
+        !password ||
+        email === '' ||
+        password === '') {
+            next({message: "Please provide a username and password", status: 400});
+        }
+    else {
+        next();
+    }
+};
 
 const checkEmailUnique = async (req, res, next) => {
     const { email } = req.body;
@@ -61,6 +74,7 @@ function formatPhoneNumber (phoneNumberString) {
 }
 
 module.exports = {
+    checkLoginCredentials,
     checkEmailUnique,
     checkEmailExists,
     checkNewUserPayload,
