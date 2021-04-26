@@ -26,7 +26,7 @@ const checkEmailUnique = async (req, res, next) => {
 
 const checkEmailExists = async (req, res, next) => {
     const { email } = req.body;
-    const [user] = await findByFilter({ email });
+    const user = await findByFilter({ email });
     if (!user) {
         next({ message: "Invalid credentials", status: 401 });
     } else {
