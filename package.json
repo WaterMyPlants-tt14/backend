@@ -1,5 +1,5 @@
 {
-    "name": "Backend",
+    "name": "backend",
     "version": "1.0.0",
     "description": "",
     "main": "index.js",
@@ -9,10 +9,10 @@
         "migrate": "knex migrate:latest",
         "rollback": "knex migrate:rollback",
         "seed": "knex seed:run",
-        "migrateh": "heroku run knex migrate:latest -a podchatapi",
-        "rollbackh": "heroku run knex migrate:rollback -a podchatapi",
-        "databaseh": "heroku pg:psql -a podchatapi",
-        "seedh": "heroku run knex seed:run -a podchatapi",
+        "migrateh": "heroku run knex migrate:latest -a water-my-plants-tt14",
+        "rollbackh": "heroku run knex migrate:rollback -a water-my-plants-tt14",
+        "databaseh": "heroku pg:psql -a water-my-plants-tt14",
+        "seedh": "heroku run knex seed:run -a water-my-plants-tt14",
         "test": "cross-env NODE_ENV=testing jest --watchAll --verbose --runInBand",
         "deploy": "git push heroku main"
     },
