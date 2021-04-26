@@ -11,6 +11,13 @@ function findById(id) {
 // insert into user_plants (plant_nickname,water_day,plant_location,notes,species_id,user_id)
 // values ('Cool plant', 3, 'cool room','this will show coolness and provide chills', 5, 1)
 
+async function addPlant(newPlant){
+    let b =  await db('user_plants').insert(newPlant);
+    console.log(b);
+    return b;
+}
+
 module.exports = {
     findById,
+    addPlant
 };

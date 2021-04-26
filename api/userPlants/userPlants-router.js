@@ -10,8 +10,21 @@ router.get("/", (req, res, next) => {
 
 
 // [POST] - /api/userplants
-router.post('/', (req,res,next) => {
-    res.json('added new plant');
+router.post('/', async (req,res,next) => {
+    
+
+    try {
+        const newPlant = await UserPlants.addPlant(req.body);
+        if(!newPlant){
+            // middleware to check if body is good?
+            res.json(401).json({message: 'sorry couldnt post plant'});
+        }else{
+            // returns the new plant data
+            res.json(newPlant);
+        }
+    } catch (err) {
+        next(err);
+    }
 });
 
 // [PUT] - /api/userplants
