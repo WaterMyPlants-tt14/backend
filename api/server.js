@@ -5,6 +5,7 @@ const server = express();
 
 const speciesRouter = require('./species/species-router');
 const userPlantsRouter = require('./userPlants/userPlants-router');
+const userRouter = require('./users/users-router');
 
 server.use(express.json());
 server.use(helmet());
@@ -12,6 +13,7 @@ server.use(cors());
 
 server.use('/api/species', speciesRouter);
 server.use('/api/userplants', userPlantsRouter);
+server.use('/api/user', userRouter);
 
 server.use((err, req, res, next) => { // eslint-disable-line
     res.status(err.status || 500).json({
