@@ -1,8 +1,19 @@
 
 
-const checkUsernameExists = async (req, res, next) => {
-    const {username} = req.body;
-    const [user] = await findBy({username});
+
+const checkEmailUnique = async (req, res, next) => {
+    const { email } = req.body;
+    const existingEmail = await findBy({email}); //TODO: check to make sure findBy is correct user router function. Import function
+    if (existingEmail) {
+        next({message: `${email} already exists.`, status: 400});
+    } else {
+        next();
+    }
+};
+
+const checkEmailExists = async (req, res, next) => {
+    const {email} = req.body;
+    const [user] = await findBy({email}); //TODO: check to make sure findBy is correct User Router function. Import function.
     if (!user) {
       next({message: "Invalid credentials", status: 401});
     } else {
@@ -50,7 +61,8 @@ function formatPhoneNumber (phoneNumberString) {
 }
 
 module.exports = {
-    checkUsernameExists,
+    checkEmailUnique,
+    checkEmailExists,
     checkNewUserPayload,
     formatNewUserPayload,
 };
