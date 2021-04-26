@@ -1,11 +1,11 @@
 const bcrypt = require('bcryptjs');
 const router = require('express').Router();
 const Users = require('../users/users-model.js');
-const mw = require('../middleware/middleware.js')
+const mw = require('../middleware/middleware.js');
 const jwt = require('jsonwebtoken');
 const { jwtSecret } = require('../config/secrets.js');
 
-router.post('/register', async (req, res, next) => {
+router.post('/register', mw.checkNewUserPayload, mw.formatNewUserPayload, mw.checkEmailUnique, async (req, res, next) => {
     let user = req.body;
 
     //const rounds = process.env.BCRYPT_ROUNDS || 8;
@@ -20,7 +20,7 @@ router.post('/register', async (req, res, next) => {
         .catch(next);
 });
 
-router.post('/login', checkLoginCredentials, checkEmailExists, (req, res, next) => {
+router.post('/login', (req, res, next) => {
     let { name, email, phone, password, } = req.body;
 
     //findby???

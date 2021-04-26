@@ -1,16 +1,16 @@
 
-exports.up = function(knex) {
+exports.up = function (knex) {
     return knex.schema
         .createTable("users", tbl => {
             tbl.increments("user_id");
-            tbl.string("name",80).notNullable();
+            tbl.string("name", 80).notNullable();
             tbl.string("email", 80).notNullable().unique();
             tbl.string("password").notNullable();
-            tbl.varchar("phone", 10).notNullable().unique();
+            tbl.varchar("phone", 14).notNullable().unique();
         })
         .createTable("water_schedule", tbl => {
             tbl.increments("water_id");
-            tbl.string("water_schedule",40);
+            tbl.string("water_schedule", 40);
         })
         .createTable("species", tbl => {
             tbl.increments("species_id");
@@ -48,7 +48,7 @@ exports.up = function(knex) {
         });
 };
 
-exports.down = function(knex) {
+exports.down = function (knex) {
     return knex.schema
         .dropTableIfExists("user_plants")
         .dropTableIfExists("species")
