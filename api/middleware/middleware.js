@@ -1,4 +1,16 @@
 
+
+const checkUsernameExists = async (req, res, next) => {
+    const {username} = req.body;
+    const [user] = await findBy({username});
+    if (!user) {
+      next({message: "Invalid credentials", status: 401});
+    } else {
+      req.body.user = user;
+      next();
+    }
+};
+
 const checkNewUserPayload = (req, res, next) => {
     const { email, password, phone, name } = req.body;
     switch(true) {
@@ -16,28 +28,29 @@ const checkNewUserPayload = (req, res, next) => {
         break;
         default:
             next();
-        }
-    };
-    
-    const formatNewUserPayload = (req, res, next) => {
-        const { email, password, phone, name } = req.body;
-        req.body.email = email.trim();
-        req.body.password = password.trim();
-        req.body.phone = formatPhoneNumber(phone);
-        req.body.name = name.trim();
-        next();
-    };
-    
-    function formatPhoneNumber (phoneNumberString) {
-        const cleaned = ('' + phoneNumberString).replace(/\D/g, '');
-        const match = cleaned.match(/^(\d{3})(\d{3})(\d{4})$/);
-        if (match) {
-          return '(' + match[1] + ') ' + match[2] + '-' + match[3];
-        }
-        return null;
     }
+};
+    
+const formatNewUserPayload = (req, res, next) => {
+    const { email, password, phone, name } = req.body;
+    req.body.email = email.trim();
+    req.body.password = password.trim();
+    req.body.phone = formatPhoneNumber(phone);
+    req.body.name = name.trim();
+    next();
+};
+    
+function formatPhoneNumber (phoneNumberString) {
+    const cleaned = ('' + phoneNumberString).replace(/\D/g, '');
+    const match = cleaned.match(/^(\d{3})(\d{3})(\d{4})$/);
+    if (match) {
+        return '(' + match[1] + ') ' + match[2] + '-' + match[3];
+    }
+    return null;
+}
 
 module.exports = {
+    checkUsernameExists,
     checkNewUserPayload,
     formatNewUserPayload,
 };
