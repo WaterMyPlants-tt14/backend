@@ -32,8 +32,15 @@ async function updatePlant(user_plant_id,updatedPlant){
     return findUserPlantsByPlantsID(id);
 }
 
+function del(user_plant_id){
+    return db('user_plants')
+        .where({user_plant_id})
+        .del();
+}
+
 module.exports = {
     findById,
     addPlant,
-    updatePlant
+    updatePlant,
+    del
 };
