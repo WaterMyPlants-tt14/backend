@@ -1,5 +1,6 @@
 const router = require("express").Router();
 const UserPlants = require("./userPlants-model");
+const { checkNewUserPlantPayload } = require('../middleware/middleware');
 
 // [GET] - /api/userplants
 router.get("/", (req, res, next) => {
@@ -10,7 +11,7 @@ router.get("/", (req, res, next) => {
 
 
 // [POST] - /api/userplants
-router.post('/', async (req,res,next) => {
+router.post('/', checkNewUserPlantPayload, async (req,res,next) => {
 
     // middleware to check if body is good? geto i know 😅
     !req.body ? res.json(401).json({message: 'sorry no data found'}) : req.body; 
@@ -47,8 +48,13 @@ router.put('/:user_plant_id', async (req,res,next) => {
 });
 
 // [DELETE] - /api/userplants
-router.put('/', (req,res,next) => {
-    res.json('deleted plant');
+router.delete('/:user_plant_id', async (req,res,next) => {
+    try {
+        await UserPlants.del(req.params.user_plant_id);
+        res.status(200).json({message: 'plant deleted'});
+    } catch (err) {
+        next(err);
+    }
 });
 
 

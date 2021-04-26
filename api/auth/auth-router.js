@@ -20,12 +20,13 @@ router.post('/register', async (req, res, next) => {
         .catch(next);
 });
 
-router.post('/login', (req, res, next) => {
+router.post('/login', checkLoginCredentials, checkEmailExists, (req, res, next) => {
     let { name, email, phone, password, } = req.body;
 
     //findby???
     Users.findByFilter({ email })
         .then(user => {
+
             if (user && bcrypt.compareSync(password, user.password)) {
                 const token = makeToken(user);
 
