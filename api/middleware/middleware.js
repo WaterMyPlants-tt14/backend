@@ -1,4 +1,4 @@
-
+const { findByFilter } = require("../users/users-model");
 
 const checkLoginCredentials = (req, res, next) => {
     const { email, password } = req.body;
@@ -16,7 +16,7 @@ const checkLoginCredentials = (req, res, next) => {
 
 const checkEmailUnique = async (req, res, next) => {
     const { email } = req.body;
-    const existingEmail = await findBy({email}); //TODO: check to make sure findBy is correct user router function. Import function
+    const existingEmail = await findByFilter({email});
     if (existingEmail) {
         next({message: `${email} already exists.`, status: 400});
     } else {
@@ -26,7 +26,7 @@ const checkEmailUnique = async (req, res, next) => {
 
 const checkEmailExists = async (req, res, next) => {
     const {email} = req.body;
-    const [user] = await findBy({email}); //TODO: check to make sure findBy is correct User Router function. Import function.
+    const [user] = await findByFilter({email});
     if (!user) {
       next({message: "Invalid credentials", status: 401});
     } else {
@@ -39,17 +39,17 @@ const checkNewUserPayload = (req, res, next) => {
     const { email, password, phone, name } = req.body;
     switch(true) {
         case(!email || !email.match(/^\S+@\S+\.\S+$/)):
-        next({message: "Please provide a valid email.", status: 400});
-        break;
+            next({message: "Please provide a valid email.", status: 400});
+            break;
         case(!password || password.length < 8):
-        next({message: "Please provide a valid password.", status: 400});
-        break;
+            next({message: "Please provide a valid password.", status: 400});
+            break;
         case(!phone || !phone.match(/\d/g).length===10):
-        next({message: "Please provide a valid phone number.", status: 400});
-        break;
+            next({message: "Please provide a valid phone number.", status: 400});
+            break;
         case(!name || name === ''):
-        next({message: "Please provide a name.", status: 400});
-        break;
+            next({message: "Please provide a name.", status: 400});
+            break;
         default:
             next();
     }
@@ -63,15 +63,6 @@ const formatNewUserPayload = (req, res, next) => {
     req.body.name = name.trim();
     next();
 };
-    
-function formatPhoneNumber (phoneNumberString) {
-    const cleaned = ('' + phoneNumberString).replace(/\D/g, '');
-    const match = cleaned.match(/^(\d{3})(\d{3})(\d{4})$/);
-    if (match) {
-        return '(' + match[1] + ') ' + match[2] + '-' + match[3];
-    }
-    return null;
-}
 
 const checkNewUserPlantPayload = (req, res, next) => {
     const {plant_nickname, water_day} = req.body;
@@ -88,6 +79,16 @@ const checkNewUserPlantPayload = (req, res, next) => {
         req.body.water_day = water_day.trim();
     }
 };
+
+//Helper functions
+function formatPhoneNumber (phoneNumberString) {
+    const cleaned = ('' + phoneNumberString).replace(/\D/g, '');
+    const match = cleaned.match(/^(\d{3})(\d{3})(\d{4})$/);
+    if (match) {
+        return '(' + match[1] + ') ' + match[2] + '-' + match[3];
+    }
+    return null;
+}
 
 module.exports = {
     checkLoginCredentials,

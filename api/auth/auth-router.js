@@ -1,12 +1,18 @@
 const bcrypt = require('bcryptjs');
 const router = require('express').Router();
-//const Users = import Users model here 
+const { checkLoginCredentials, 
+    checkEmailUnique, 
+    checkEmailExists, 
+    checkNewUserPayload, 
+    formatNewUserPayload, 
+    } = require('../middleware/middleware');
+const Users = require('../users/users-model');
 
 const jwt = require('jsonwebtoken');
-const { jwtSecret } = require('../config/secrets.js')
+const { jwtSecret } = require('../config/secrets.js');
 
 
-router.post('/register', (req, res, next) => {
+router.post('/register', checkNewUserPayload, formatNewUserPayload, checkEmailUnique, (req, res, next) => {
     let user = req.body;
 
     const rounds = process.env.BCRYPT_ROUNDS || 8;
@@ -22,11 +28,11 @@ router.post('/register', (req, res, next) => {
         .catch(next);
 });
 
-router.post('/login', (req, res, next) => {
+router.post('/login', checkLoginCredentials, checkEmailExists, (req, res, next) => {
     let { name, email, phone, password, } = req.body;
 
     //findby???
-    Users.findBy({ email })
+    Users.findByFilter({ email })
         .then(([user]) => {
             if (user && bcrypt.compareSync(password, user.password)) {
                 const token = makeToken(user);
