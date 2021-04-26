@@ -12,9 +12,9 @@ function findById(id) {
 // values ('Cool plant', 3, 'cool room','this will show coolness and provide chills', 5, 1)
 
 async function addPlant(newPlant){
-    let b =  await db('user_plants').insert(newPlant);
-    console.log(b);
-    return b;
+    const [user_plant_id] = await db('user_plants').returning('user_plant_id').insert(newPlant);
+    // finds plant by plant id
+    return db('user_plants').where({user_plant_id}).first();
 }
 
 module.exports = {

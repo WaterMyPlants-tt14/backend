@@ -11,17 +11,16 @@ router.get("/", (req, res, next) => {
 
 // [POST] - /api/userplants
 router.post('/', async (req,res,next) => {
+
+    if(!req.body){
+        // middleware to check if body is good?
+        res.json(401).json({message: 'sorry couldnt post plant'});
+    }
     
 
     try {
         const newPlant = await UserPlants.addPlant(req.body);
-        if(!newPlant){
-            // middleware to check if body is good?
-            res.json(401).json({message: 'sorry couldnt post plant'});
-        }else{
-            // returns the new plant data
-            res.json(newPlant);
-        }
+        res.json(newPlant);
     } catch (err) {
         next(err);
     }
