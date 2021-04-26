@@ -8,6 +8,9 @@ function findById(id) {
         .select("up.user_plant_id", "up.plant_nickname", "up.plant_location", "up.notes", "up.water_day", "sp.species_id", "sp.plant_name", "sp.plant_scientific_name", "sp.plant_image", "ws.water_schedule");
 }
 
+// insert into user_plants (plant_nickname,water_day,plant_location,notes,species_id,user_id)
+// values ('Cool plant', 3, 'cool room','this will show coolness and provide chills', 5, 1)
+
 module.exports = {
     findById,
 };
