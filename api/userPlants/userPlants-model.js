@@ -26,12 +26,10 @@ async function addPlant(newPlant){
 
 
 async function updatePlant(user_plant_id,updatedPlant){
-    const [id] = await db('user_plants')
-        .where({user_plant_id})
-        .returning('user_plant_id')
+    await db('user_plants')
+        .where("user_plant_id", user_plant_id)
         .update(updatedPlant);
-
-    return findUserPlantsByPlantsID(id);
+    return findUserPlantsByPlantsID(user_plant_id);
 }
 
 function del(user_plant_id){
@@ -44,5 +42,6 @@ module.exports = {
     findById,
     addPlant,
     updatePlant,
-    del
+    del,
+    findUserPlantsByPlantsID
 };

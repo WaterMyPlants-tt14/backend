@@ -1,4 +1,5 @@
 const { findByFilter } = require("../users/users-model");
+const { findUserPlantsByPlantsID } = require('../userPlants/userPlants-model');
 
 const checkLoginCredentials = (req, res, next) => {
     const { email, password } = req.body;
@@ -81,6 +82,21 @@ const checkNewUserPlantPayload = (req, res, next) => {
     }
 };
 
+const checkUserPlantExists = async (req, res, next) => {
+    const { user_plant_id } = req.params;
+
+    if (!user_plant_id) {
+        next({message: "Plant with that ID not found", status: 400});
+    } else {
+        const plant = await findUserPlantsByPlantsID(user_plant_id);
+        if (!plant) {
+            next({message: "Plant with that ID not found", status: 400});
+        } else{
+            next();
+        }
+    }
+}
+
 //Helper functions
 function formatPhoneNumber(phoneNumberString) {
     const cleaned = ('' + phoneNumberString).replace(/\D/g, '');
@@ -97,5 +113,6 @@ module.exports = {
     checkEmailExists,
     checkNewUserPayload,
     formatNewUserPayload,
-    checkNewUserPlantPayload
+    checkNewUserPlantPayload,
+    checkUserPlantExists
 };
