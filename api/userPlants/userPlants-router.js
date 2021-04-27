@@ -3,8 +3,8 @@ const UserPlants = require("./userPlants-model");
 const { checkNewUserPlantPayload } = require('../middleware/middleware');
 
 // [GET] - /api/userplants
-router.get("/", (req, res, next) => {
-    UserPlants.findById(id)
+router.get("/:id", (req, res, next) => {
+    UserPlants.findById(req.params.id)
         .then(plants => res.status(200).json(plants))
         .catch(next);
 });
