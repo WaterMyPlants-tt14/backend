@@ -75,6 +75,8 @@ const checkNewUserPlantPayload = (req, res, next) => {
         next({ status: 400, message: 'Please provide a day to begin watering your plant' });
     } else if (typeof water_day !== 'number') {
         next({ status: 400, message: 'Sorry water days only identify as numbers' });
+    } else if (water_day < 1 || water_day > 7) {
+        next({status: 400, message: "What are you making up days now? Please enter a water day between 1-7"});
     } else {
         req.body.plant_nickname = plant_nickname.trim();
         req.body.water_day = water_day;
@@ -91,11 +93,13 @@ const checkUserPlantExists = async (req, res, next) => {
         const plant = await findUserPlantsByPlantsID(user_plant_id);
         if (!plant) {
             next({message: "Plant with that ID not found", status: 400});
-        } else{
+        } else if (plant.user_id !== req.decodedToken.user_id) {
+            next({message: "This is not your plant", status: 403});
+        } else {
             next();
         }
     }
-}
+};
 
 //Helper functions
 function formatPhoneNumber(phoneNumberString) {
