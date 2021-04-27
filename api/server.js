@@ -7,6 +7,7 @@ const speciesRouter = require('./species/species-router');
 const userPlantsRouter = require('./userPlants/userPlants-router');
 const authRouter = require('./auth/auth-router.js');
 const userRouter = require('./users/users-router');
+const restricted = require('../middleware/restricted');
 
 server.use(express.json());
 server.use(helmet());
@@ -15,7 +16,7 @@ server.use(cors());
 server.use('/api/species', speciesRouter);
 server.use('/api/userplants', userPlantsRouter);
 server.use('/api/users', userRouter);
-server.use('/api/auth', authRouter);
+server.use('/api/auth',restricted, authRouter);
 
 
 

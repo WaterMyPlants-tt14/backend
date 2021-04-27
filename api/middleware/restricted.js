@@ -5,7 +5,7 @@ module.exports = (req, res, next) => {
     const token = req.headers.authorization;
 
     if (!token) {
-        res.status(401).json("Oops, you need to provide a token.")
+        res.status(401).json("Oops, you need to provide a token.");
     } else {
 
         jwt.verify(token, jwtSecret, (err, decoded) => {

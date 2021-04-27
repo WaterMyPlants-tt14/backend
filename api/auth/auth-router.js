@@ -37,13 +37,13 @@ router.post('/login', mw.checkLoginCredentials, mw.checkEmailExists, (req, res, 
 
 function makeToken(user) {
     const payload = {
-        subject: user.id,
+        user_id: user.user_id,
         name: user.name,
         email: user.email,
         phone: user.phone,
     };
     const options = {
-        expiresIn: "500s"
+        expiresIn: "1d"
     };
     return jwt.sign(payload, jwtSecret, options);
 }
