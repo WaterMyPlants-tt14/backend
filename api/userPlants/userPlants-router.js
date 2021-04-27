@@ -27,11 +27,7 @@ router.post('/', checkNewUserPlantPayload, restricted, async (req,res,next) => {
 router.put('/:user_plant_id', checkNewUserPlantPayload, restricted, checkUserPlantExists, async (req,res,next) => {
     const {user_plant_id} = req.params;
     const plantInfo = {...req.body, user_id: req.decodedToken.user_id};
-
-    if(!user_plant_id){
-        res.status(404).json({message: 'plant doesnt exists or invalid'});
-    }
-
+    
     try {
         const updatedPlant = await UserPlants.updatePlant(user_plant_id, plantInfo);
         res.status(200).json(updatedPlant);
