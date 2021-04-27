@@ -93,11 +93,13 @@ const checkUserPlantExists = async (req, res, next) => {
         const plant = await findUserPlantsByPlantsID(user_plant_id);
         if (!plant) {
             next({message: "Plant with that ID not found", status: 400});
-        } else{
+        } else if (plant.user_id !== req.decodedToken.user_id) {
+            next({message: "This is not your plant", status: 403});
+        } else {
             next();
         }
     }
-}
+};
 
 //Helper functions
 function formatPhoneNumber(phoneNumberString) {
