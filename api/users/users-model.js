@@ -6,7 +6,6 @@ function findByFilter(filter) {
         .where(filter)
         .first();
 }
-//Double check that we want one object or array returned 
 
 function update(id, changes) {
     return db('users')
@@ -14,7 +13,6 @@ function update(id, changes) {
         .where('user_id', id)
         .update(changes);
 }
-//Double check what we want returned for update function for users
 
 async function add(user) {
     const [user_id] = await db("users").insert(user, "user_id");
