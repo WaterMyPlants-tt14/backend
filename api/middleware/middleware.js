@@ -75,6 +75,8 @@ const checkNewUserPlantPayload = (req, res, next) => {
         next({ status: 400, message: 'Please provide a day to begin watering your plant' });
     } else if (typeof water_day !== 'number') {
         next({ status: 400, message: 'Sorry water days only identify as numbers' });
+    } else if (water_day < 1 || water_day > 7) {
+        next({status: 400, message: "What are you making up days now? Please enter a water day between 1-7"});
     } else {
         req.body.plant_nickname = plant_nickname.trim();
         req.body.water_day = water_day;

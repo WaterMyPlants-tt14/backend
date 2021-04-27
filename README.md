@@ -152,6 +152,7 @@ Sample POST req.body:
     water_day: 5,
     notes: "It's my second favorite, but I only own two plants. So really it's my least favorite."
 }
+*NOTE: user_id is added to the req.body automatically by the back end from the user's token. If it errors, there's an error with the token.
 
 BaseURL/api/userplants [PUT] - updates plant in user's collection. Returns updated plant object
 
