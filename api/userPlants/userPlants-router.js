@@ -38,7 +38,9 @@ router.put('/:user_plant_id', checkNewUserPlantPayload, checkUserPlantExists, as
 });
 
 // [DELETE] - /api/userplants
-router.delete('/:user_plant_id', async (req,res,next) => {
+router.delete('/:user_plant_id',checkUserPlantExists, async (req,res,next) => {
+
+
     try {
         await UserPlants.del(req.params.user_plant_id);
         res.status(200).json({message: 'plant deleted'});
