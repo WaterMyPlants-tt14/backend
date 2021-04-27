@@ -76,7 +76,8 @@ const checkNewUserPlantPayload = (req, res, next) => {
         next({ status: 400, message: 'Sorry water days only identify as numbers' });
     } else {
         req.body.plant_nickname = plant_nickname.trim();
-        req.body.water_day = water_day.trim();
+        req.body.water_day = water_day;
+        next();
     }
 };
 
