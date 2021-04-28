@@ -8,7 +8,7 @@ const checkLoginCredentials = (req, res, next) => {
         !password ||
         email === '' ||
         password === '') {
-        next({ message: "Please provide a username and password", status: 400 });
+        next({ message: "Please provide a email and password", status: 400 });
     }
     else {
         next();

@@ -1,10 +1,10 @@
 const router = require("express").Router();
 const UserPlants = require("./userPlants-model");
 const { checkNewUserPlantPayload, checkUserPlantExists } = require('../middleware/middleware');
-const restricted = require('../middleware/restricted');
+
 
 // [GET] - /api/userplants
-router.get("/", restricted, (req, res, next) => {
+router.get("/", (req, res, next) => {
     const { user_id } = req.decodedToken;
     UserPlants.findById(user_id)
         .then(plants => res.status(200).json(plants))
@@ -13,7 +13,7 @@ router.get("/", restricted, (req, res, next) => {
 
 
 // [POST] - /api/userplants
-router.post('/', checkNewUserPlantPayload, restricted, async (req,res,next) => {
+router.post('/', checkNewUserPlantPayload, async (req,res,next) => {
     const newPlant = {...req.body, user_id: req.decodedToken.user_id};
     try {
         const plant = await UserPlants.addPlant(newPlant);
@@ -24,7 +24,7 @@ router.post('/', checkNewUserPlantPayload, restricted, async (req,res,next) => {
 });
 
 // [PUT] - /api/userplants
-router.put('/:user_plant_id', checkNewUserPlantPayload, restricted, checkUserPlantExists, async (req,res,next) => {
+router.put('/:user_plant_id', checkNewUserPlantPayload, checkUserPlantExists, async (req,res,next) => {
     const {user_plant_id} = req.params;
     const plantInfo = {...req.body, user_id: req.decodedToken.user_id};
     
@@ -38,7 +38,9 @@ router.put('/:user_plant_id', checkNewUserPlantPayload, restricted, checkUserPla
 });
 
 // [DELETE] - /api/userplants
-router.delete('/:user_plant_id', async (req,res,next) => {
+router.delete('/:user_plant_id',checkUserPlantExists, async (req,res,next) => {
+
+
     try {
         await UserPlants.del(req.params.user_plant_id);
         res.status(200).json({message: 'plant deleted'});
