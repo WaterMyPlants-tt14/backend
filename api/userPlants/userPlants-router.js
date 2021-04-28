@@ -31,7 +31,8 @@ router.put('/', checkNewUserPlantPayload, restricted, checkUserPlantExists, asyn
         plant_nickname: req.body.plant_nickname,
         water_day: req.body.water_day,
         notes: req.body.notes,
-        plant_location: req.body.plant_location
+        plant_location: req.body.plant_location,
+        species_id: req.body.species_id
     };
     
     try {

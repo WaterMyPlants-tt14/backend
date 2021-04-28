@@ -87,7 +87,7 @@ const checkNewUserPlantPayload = (req, res, next) => {
 };
 
 const checkUserPlantExists = async (req, res, next) => {
-    const { user_plant_id } = req.params;
+    const { user_plant_id } = req.body;
 
     if (!user_plant_id) {
         next({message: "Plant with that ID not found", status: 400});
