@@ -66,8 +66,10 @@ const formatNewUserPayload = (req, res, next) => {
 };
 
 const checkNewUserPlantPayload = (req, res, next) => {
-    const { plant_nickname, water_day } = req.body;
-    if (!plant_nickname) {
+    const { plant_nickname, water_day, species_id } = req.body;
+    if (!species_id) {
+        next({status: 400, message: "IDK what you're talking about. What plant species did you want to add again?"});
+    } else if (!plant_nickname) {
         next({ status: 400, message: 'Please provide a nickname for you lil green friend' });
     } else if (plant_nickname.length > 255) {
         next({ status: 400, message: 'Sorry the International Plant Union has restricted plant names to 255 characters or less' });
@@ -85,7 +87,7 @@ const checkNewUserPlantPayload = (req, res, next) => {
 };
 
 const checkUserPlantExists = async (req, res, next) => {
-    const { user_plant_id } = req.params;
+    const { user_plant_id } = req.body;
 
     if (!user_plant_id) {
         next({message: "Plant with that ID not found", status: 400});

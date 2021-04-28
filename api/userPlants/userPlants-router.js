@@ -24,9 +24,17 @@ router.post('/', checkNewUserPlantPayload, async (req,res,next) => {
 });
 
 // [PUT] - /api/userplants
-router.put('/:user_plant_id', checkNewUserPlantPayload, checkUserPlantExists, async (req,res,next) => {
-    const {user_plant_id} = req.params;
-    const plantInfo = {...req.body, user_id: req.decodedToken.user_id};
+router.put('/', checkNewUserPlantPayload, restricted, checkUserPlantExists, async (req,res,next) => {
+    const user_plant_id = req.body.user_plant_id;
+    const plantInfo = {
+        user_id: req.decodedToken.user_id,
+        plant_nickname: req.body.plant_nickname,
+        water_day: req.body.water_day,
+        notes: req.body.notes,
+        plant_location: req.body.plant_location,
+        species_id: req.body.species_id
+    };
+
     
     try {
         const updatedPlant = await UserPlants.updatePlant(user_plant_id, plantInfo);
@@ -38,11 +46,11 @@ router.put('/:user_plant_id', checkNewUserPlantPayload, checkUserPlantExists, as
 });
 
 // [DELETE] - /api/userplants
-router.delete('/:user_plant_id',checkUserPlantExists, async (req,res,next) => {
 
-
+router.delete('/', async (req,res,next) => {
+    const {user_plant_id} = req.body;
     try {
-        await UserPlants.del(req.params.user_plant_id);
+        await UserPlants.del(user_plant_id);
         res.status(200).json({message: 'plant deleted'});
     } catch (err) {
         next(err);
