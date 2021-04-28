@@ -5,7 +5,7 @@ const { checkNewUserPlantPayload, checkUserPlantExists } = require('../middlewar
 
 
 // [GET] - /api/userplants
-router.get("/", (req, res, next) => {
+router.get("/", restricted, (req, res, next) => {
     const { user_id } = req.decodedToken;
     UserPlants.findById(user_id)
         .then(plants => res.status(200).json(plants))
