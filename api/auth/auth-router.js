@@ -16,14 +16,14 @@ router.post('/register', mw.checkNewUserPayload, mw.formatNewUserPayload, mw.che
     try {
         const saved = await Users.add(user);
         res.status(201).json(saved);
-    }catch (err) {
+    } catch (err) {
         next(err);
     }
-    
+
 });
 
 router.post('/login', mw.checkLoginCredentials, mw.checkEmailExists, (req, res, next) => {
-    let { name, email, phone, password, } = req.body;
+    let { password } = req.body;
     if (req.body.user && bcrypt.compareSync(password, req.body.user.password)) {
         const token = makeToken(req.body.user);
 

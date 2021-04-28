@@ -1,5 +1,5 @@
 const router = require("express").Router();
-const restricted = require('../middleware/restricted.js')
+const restricted = require('../middleware/restricted.js');
 const UserPlants = require("./userPlants-model");
 const { checkNewUserPlantPayload, checkUserPlantExists } = require('../middleware/middleware');
 
@@ -48,7 +48,7 @@ router.put('/', checkNewUserPlantPayload, restricted, checkUserPlantExists, asyn
 
 // [DELETE] - /api/userplants
 
-router.delete('/', async (req, res, next) => {
+router.delete('/', restricted, async (req, res, next) => {
     const { user_plant_id } = req.body;
     try {
         await UserPlants.del(user_plant_id);
