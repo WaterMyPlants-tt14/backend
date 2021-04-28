@@ -1,4 +1,5 @@
 const router = require("express").Router();
+const restricted = require('../middleware/restricted.js')
 const UserPlants = require("./userPlants-model");
 const { checkNewUserPlantPayload, checkUserPlantExists } = require('../middleware/middleware');
 
@@ -13,8 +14,8 @@ router.get("/", (req, res, next) => {
 
 
 // [POST] - /api/userplants
-router.post('/', checkNewUserPlantPayload, async (req,res,next) => {
-    const newPlant = {...req.body, user_id: req.decodedToken.user_id};
+router.post('/', checkNewUserPlantPayload, restricted, async (req, res, next) => {
+    const newPlant = { ...req.body, user_id: req.decodedToken.user_id };
     try {
         const plant = await UserPlants.addPlant(newPlant);
         res.status(200).json(plant);
@@ -24,7 +25,7 @@ router.post('/', checkNewUserPlantPayload, async (req,res,next) => {
 });
 
 // [PUT] - /api/userplants
-router.put('/', checkNewUserPlantPayload, restricted, checkUserPlantExists, async (req,res,next) => {
+router.put('/', checkNewUserPlantPayload, restricted, checkUserPlantExists, async (req, res, next) => {
     const user_plant_id = req.body.user_plant_id;
     const plantInfo = {
         user_id: req.decodedToken.user_id,
@@ -35,7 +36,7 @@ router.put('/', checkNewUserPlantPayload, restricted, checkUserPlantExists, asyn
         species_id: req.body.species_id
     };
 
-    
+
     try {
         const updatedPlant = await UserPlants.updatePlant(user_plant_id, plantInfo);
         res.status(200).json(updatedPlant);
@@ -47,11 +48,11 @@ router.put('/', checkNewUserPlantPayload, restricted, checkUserPlantExists, asyn
 
 // [DELETE] - /api/userplants
 
-router.delete('/', async (req,res,next) => {
-    const {user_plant_id} = req.body;
+router.delete('/', async (req, res, next) => {
+    const { user_plant_id } = req.body;
     try {
         await UserPlants.del(user_plant_id);
-        res.status(200).json({message: 'plant deleted'});
+        res.status(200).json({ message: 'plant deleted' });
     } catch (err) {
         next(err);
     }
