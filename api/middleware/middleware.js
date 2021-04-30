@@ -95,7 +95,7 @@ const checkUserPlantExists = async (req, res, next) => {
             next();
         }
     }
-}
+};
 
 //Helper functions
 function formatPhoneNumber(phoneNumberString) {
