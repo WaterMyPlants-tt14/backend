@@ -12,7 +12,7 @@ router.get('/', (req, res, next) => {
 
 router.put('/', restricted, (req, res, next) => {
     Users.update(req.decodedToken.user_id, req.body)
-    .then(success => {
+    .then(() => {
         res.status(201).json({message: `Success`});
     })
     .catch(next);
