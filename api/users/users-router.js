@@ -1,4 +1,5 @@
 const router = require('express').Router();
+const restricted = require('../middleware/restricted');
 const Users = require('./users-model');
 
 router.get('/', (req, res, next) => {
@@ -9,12 +10,12 @@ router.get('/', (req, res, next) => {
         .catch(next);
 });
 
-router.put('/', (req, res, next) => {
-    Users.update(req.params.id, req.body)
-        .then(updatedUser => {
-            res.status(201).json(updatedUser);
-        })
-        .catch(next);
+router.put('/', restricted, (req, res, next) => {
+    Users.update(req.decodedToken.user_id, req.body)
+    .then(() => {
+        res.status(201).json({message: `Success`});
+    })
+    .catch(next);
 });
 
 module.exports = router;
