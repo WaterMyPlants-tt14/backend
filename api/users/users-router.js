@@ -4,10 +4,10 @@ const Users = require('./users-model');
 
 router.get('/', (req, res, next) => {
     Users.findByFilter(req.body)
-    .then(filteredUser => {
-        res.status(200).json(filteredUser);
-    })
-    .catch(next);
+        .then(filteredUser => {
+            res.status(200).json(filteredUser);
+        })
+        .catch(next);
 });
 
 router.put('/', restricted, (req, res, next) => {

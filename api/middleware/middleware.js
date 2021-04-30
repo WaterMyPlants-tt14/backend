@@ -8,7 +8,7 @@ const checkLoginCredentials = (req, res, next) => {
         !password ||
         email === '' ||
         password === '') {
-        next({ message: "Please provide a username and password", status: 400 });
+        next({ message: "Please provide a email and password", status: 400 });
     }
     else {
         next();
@@ -66,8 +66,10 @@ const formatNewUserPayload = (req, res, next) => {
 };
 
 const checkNewUserPlantPayload = (req, res, next) => {
-    const { plant_nickname, water_day } = req.body;
-    if (!plant_nickname) {
+    const { plant_nickname, water_day, species_id } = req.body;
+    if (!species_id) {
+        next({status: 400, message: "IDK what you're talking about. What plant species did you want to add again?"});
+    } else if (!plant_nickname) {
         next({ status: 400, message: 'Please provide a nickname for you lil green friend' });
     } else if (plant_nickname.length > 255) {
         next({ status: 400, message: 'Sorry the International Plant Union has restricted plant names to 255 characters or less' });
@@ -75,6 +77,8 @@ const checkNewUserPlantPayload = (req, res, next) => {
         next({ status: 400, message: 'Please provide a day to begin watering your plant' });
     } else if (typeof water_day !== 'number') {
         next({ status: 400, message: 'Sorry water days only identify as numbers' });
+    } else if (water_day < 1 || water_day > 7) {
+        next({status: 400, message: "What are you making up days now? Please enter a water day between 1-7"});
     } else {
         req.body.plant_nickname = plant_nickname.trim();
         req.body.water_day = water_day;
@@ -83,7 +87,7 @@ const checkNewUserPlantPayload = (req, res, next) => {
 };
 
 const checkUserPlantExists = async (req, res, next) => {
-    const { user_plant_id } = req.params;
+    const { user_plant_id } = req.body;
 
     if (!user_plant_id) {
         next({message: "Plant with that ID not found", status: 400});
@@ -91,7 +95,9 @@ const checkUserPlantExists = async (req, res, next) => {
         const plant = await findUserPlantsByPlantsID(user_plant_id);
         if (!plant) {
             next({message: "Plant with that ID not found", status: 400});
-        } else{
+        } else if (plant.user_id !== req.decodedToken.user_id) {
+            next({message: "This is not your plant", status: 403});
+        } else {
             next();
         }
     }
