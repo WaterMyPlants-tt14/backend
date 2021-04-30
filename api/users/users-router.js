@@ -7,6 +7,7 @@ router.get('/',restricted, (req, res, next) => {
 
     
     const {user_id, name} = req.decodedToken;
+    console.log(req.decodedToken); 
     // password needs to be dectypted 
     Users.findByFilter({user_id: user_id})
         .then(filteredUser => {
