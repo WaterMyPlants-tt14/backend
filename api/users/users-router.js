@@ -2,8 +2,8 @@ const router = require('express').Router();
 const restricted = require('../middleware/restricted');
 const Users = require('./users-model');
 
-router.get('/', (req, res, next) => {
-    Users.findByFilter(req.body)
+router.get('/', restricted, (req, res, next) => {
+    Users.findByFilter({user_id: req.decodedToken.user_id})
         .then(filteredUser => {
             res.status(200).json(filteredUser);
         })
