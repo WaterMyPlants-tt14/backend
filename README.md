@@ -1,3 +1,5 @@
+Water My Plants is a web app designed for users to quickly get the ideal watering schedule for their type of plant. Users can create an account, find their species of plant, and select the day they want to begin watering their plant. Once they add a new plant, our site automatically generates a card for them with that plant's information and which days it should be watered on. Water My Plants takes out the uncertainity of how often one should water their plants.
+
 WMP💦 - BACKEND README
 
 Welcome to the WMP💦 API! 
